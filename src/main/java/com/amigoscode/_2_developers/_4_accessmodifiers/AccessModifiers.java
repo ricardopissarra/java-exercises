@@ -9,35 +9,35 @@ package com.amigoscode._2_developers._4_accessmodifiers;
  */
 public class AccessModifiers {
 
-    // TODO: 1 - Declare a private String field called 'secret'.
-    //  Private means only this class can access it directly.
+    private String secret;
 
+    public String publicGreeting() {
+        return "Hello from a public method!";
+    }
 
-    // TODO: 2 - Declare a public method called 'publicGreeting' that returns
-    //  the String "Hello from a public method!".
-    //  Public means any class, in any package, can call this method.
+    protected String protectedGreeting() {
+        return "Hello from a protected method!";
+    }
 
+    String packageGreeting() {
+        return "Hello from a package-private method!";
+    }
 
-    // TODO: 3 - Declare a protected method called 'protectedGreeting' that returns
-    //  the String "Hello from a protected method!".
-    //  Protected means accessible within this package and by subclasses in other packages.
+    public String getSecret() {
+        return secret;
+    }
 
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
 
-    // TODO: 4 - Declare a package-private (default) method called 'packageGreeting'
-    //  that returns the String "Hello from a package-private method!".
-    //  Package-private means no access modifier keyword — accessible only within this package.
+    public String demonstrateInternalAccess() {
+        this.secret = "Internal access works!";
 
-
-    // TODO: 5 - Create a getter (getSecret) and a setter (setSecret) for the 'secret' field.
-    //  The getter should be public and return the secret.
-    //  The setter should be public, take a String parameter, and assign it to the field.
-
-
-    // TODO: 6 - Create a public method called 'demonstrateInternalAccess' that:
-    //  - Sets the secret field directly (not through the setter) to "Internal access works!"
-    //  - Calls all three greeting methods (public, protected, package-private)
-    //  - Returns a String summarizing: the secret value and all three greetings,
-    //    separated by newlines.
-    //  This demonstrates that within the same class, ALL access levels are accessible.
+        return getSecret() + "\n" +
+                publicGreeting() + "\n" +
+                protectedGreeting() + "\n" +
+                packageGreeting();
+    }
 
 }
