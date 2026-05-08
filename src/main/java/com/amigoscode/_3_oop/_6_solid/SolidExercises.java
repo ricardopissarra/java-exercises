@@ -27,10 +27,10 @@ public class SolidExercises {
 
     // This is the BROKEN version. Do not modify it — write the fix below.
     static class UserManagerBroken {
+
         void createUser(String name, String email) {
             // Validates
-            if (name == null || name.isEmpty()) throw new IllegalArgumentException("Invalid name");
-            if (!email.contains("@")) throw new IllegalArgumentException("Invalid email");
+
             // Saves to database
             System.out.println("Saving user " + name + " to database...");
             // Sends welcome email
@@ -38,16 +38,46 @@ public class SolidExercises {
         }
     }
 
-    // TODO: 1 - Refactor by creating three separate classes:
-    //   - UserValidator with a method: void validate(String name, String email)
-    //     that throws IllegalArgumentException for invalid input
-    //   - UserRepository with a method: void save(String name, String email)
-    //     that prints "Saving user <name> to database..."
-    //   - UserNotifier with a method: void sendWelcome(String email)
-    //     that prints "Sending welcome email to <email>..."
-    //   Then create a refactored UserManager that uses all three via
-    //   constructor injection and has a createUser(name, email) method.
+    static class UserValidator {
+        public void validate(String name, String email) {
+            if (name == null || name.isEmpty()) throw new IllegalArgumentException("Invalid name");
+            if (!email.contains("@")) throw new IllegalArgumentException("Invalid email");
+        }
+    }
 
+    static class UserRepository {
+        public void save(String name, String email) {
+            System.out.println("Saving user %s to database....".formatted(name));
+        }
+    }
+
+    static class UserNotifier{
+        public void sendWelcome(String email) {
+            System.out.println("Sending welcome email to " + email + "...");
+        }
+    }
+
+    static class UserManager {
+
+        private final UserValidator userValidator;
+        private final UserRepository userRepository;
+        private final UserNotifier userNotifier;
+
+        UserManager(UserValidator userValidator, UserRepository userRepository, UserNotifier userNotifier) {
+            this.userValidator = userValidator;
+            this.userRepository = userRepository;
+            this.userNotifier = userNotifier;
+        }
+
+        void createUser(String name, String email) {
+            // Validates
+            userValidator.validate(name, email);
+            // Saves to database
+            userRepository.save(name, email);
+            // Sends welcome email
+            userNotifier.sendWelcome(email);
+        }
+    }
 
     // =========================================================================
     // OCP - Open/Closed Principle
@@ -67,14 +97,35 @@ public class SolidExercises {
         }
     }
 
-    // TODO: 2 - Refactor using an interface:
-    //   - Create a Discount interface with: double apply(double price)
-    //   - Create SeasonalDiscount implementing Discount (10% off)
-    //   - Create ClearanceDiscount implementing Discount (50% off)
-    //   - Create a DiscountCalculator class with a method:
-    //     double calculate(Discount discount, double price)
-    //     that just calls discount.apply(price)
-    //   Now new discount types can be added without modifying DiscountCalculator.
+    interface Discount {
+        double apply(double price);
+    }
+
+    static class SeasonalDiscount implements Discount {
+
+        private static final double DISCOUNT = 0.1;
+
+        @Override
+        public double apply(double price) {
+            return price * (1 - DISCOUNT);
+        }
+    }
+
+    static class ClearanceDiscount implements Discount {
+
+        private static final double DISCOUNT = 0.5;
+
+        @Override
+        public double apply(double price) {
+            return price * (1 - DISCOUNT);
+        }
+    }
+
+    static class DiscountCalculator {
+        public double calculate(Discount discount, double price) {
+            return discount.apply(price);
+        }
+    }
 
 
     // =========================================================================
@@ -101,15 +152,37 @@ public class SolidExercises {
         // BUG: rect.setWidth(5); rect.setHeight(3); rect.area() -> 9, not 15!
     }
 
-    // TODO: 3 - Fix the LSP violation. Create IMMUTABLE versions:
-    //   - Create a LspShape interface with: int area()
-    //   - Create an ImmutableRectangle class implementing LspShape with
-    //     final fields width and height, constructor, and area() returning width * height
-    //   - Create an ImmutableSquare class implementing LspShape with
-    //     a final field side, constructor, and area() returning side * side
-    //   Now neither class pretends to be the other. Both satisfy LspShape.
+    interface LspShape {
+        int area();
+    }
 
+    static class ImmutableRectangle implements LspShape {
+        private final int width;
+        private final int height;
 
+        ImmutableRectangle(int width, int height) {
+            this.width = width;
+            this.height = height;
+        }
+
+        @Override
+        public int area() {
+            return width * height;
+        }
+    }
+
+    static class ImmutableSquare implements LspShape {
+        private final int side;
+
+        ImmutableSquare(int side) {
+            this.side = side;
+        }
+
+        @Override
+        public int area() {
+            return side * side;
+        }
+    }
     // =========================================================================
     // ISP - Interface Segregation Principle
     // "No client should be forced to depend on methods it does not use."
@@ -137,14 +210,43 @@ public class SolidExercises {
         public void sleep() { /* Robots don't sleep — forced to implement! */ }
     }
 
-    // TODO: 4 - Fix the ISP violation by splitting into smaller interfaces:
-    //   - Workable interface with: void work()
-    //   - Eatable interface with: void eat()
-    //   - Sleepable interface with: void sleep()
-    //   - HumanWorker class implementing Workable, Eatable, Sleepable
-    //   - RobotWorker class implementing only Workable
-    //   Now RobotWorker is not forced to implement methods it cannot use.
+    interface Workable {
+        void work();
+    }
 
+    interface Eatable {
+        void eat();
+    }
+
+    interface Sleepable {
+        void sleep();
+    }
+
+    static class HumanWorker implements Workable, Eatable, Sleepable {
+
+        @Override
+        public void eat() {
+            System.out.println("Human eating");
+        }
+
+        @Override
+        public void sleep() {
+            System.out.println("Human sleeping");
+        }
+
+        @Override
+        public void work() {
+            System.out.println("Human working");
+        }
+    }
+
+    static class RobotWorker implements Workable {
+
+        @Override
+        public void work() {
+            System.out.println("Robot working");
+        }
+    }
 
     // =========================================================================
     // DIP - Dependency Inversion Principle
@@ -168,14 +270,37 @@ public class SolidExercises {
         }
     }
 
-    // TODO: 5 - Fix the DIP violation:
-    //   - Create a Database interface with: String query(String sql)
-    //   - Create MySQLDatabase implementing Database
-    //   - Create PostgreSQLDatabase implementing Database
-    //     (its query() returns "PostgreSQL result for: " + sql)
-    //   - Create ReportGenerator that takes Database in its constructor
-    //     (constructor injection) and uses it in generateReport()
+    interface Database {
+        String query(String sql);
+    }
 
+    static class MySQLDatabase implements Database {
+
+        @Override
+        public String query(String sql) {
+            return "MySQL result for: " + sql;
+        }
+    }
+
+    static class PostgreSQLDatabase implements Database {
+
+        @Override
+        public String query(String sql) {
+            return "PostgreSQL result for: " + sql;
+        }
+    }
+
+    static class ReportGenerator {
+        private final Database database;
+
+        ReportGenerator(Database database) {
+            this.database = database;
+        }
+
+        String generateReport() {
+            return database.query("SELECT * FROM reports");
+        }
+    }
 
     // =========================================================================
     // Main method to test all exercises
@@ -183,18 +308,25 @@ public class SolidExercises {
     public static void main(String[] args) {
         System.out.println("=== SOLID Exercises ===\n");
 
-        // TODO: 6 - Test SRP: Create UserValidator, UserRepository, UserNotifier,
-        //   and a refactored UserManager. Call createUser("Alice", "alice@test.com").
+        UserValidator userValidator = new UserValidator();
+        UserRepository userRepository = new UserRepository();
+        UserNotifier userNotifier = new UserNotifier();
+        UserManager um = new UserManager(userValidator, userRepository, userNotifier);
+        um.createUser("Alice", "alice@test.com");
 
+        Discount discount1 = new SeasonalDiscount();
+        Discount discount2 = new ClearanceDiscount();
+        DiscountCalculator dc = new DiscountCalculator();
+        System.out.println(dc.calculate(discount1, 100.0));
+        System.out.println(dc.calculate(discount2, 100.0));
 
-        // TODO: 7 - Test OCP: Create a DiscountCalculator and several Discount
-        //   implementations. Calculate discounts for a $100 item and print results.
+        Database mysql = new MySQLDatabase();
+        Database psql = new PostgreSQLDatabase();
 
+        ReportGenerator rgm = new ReportGenerator(mysql);
+        ReportGenerator rgp = new ReportGenerator(psql);
 
-        // TODO: 8 - Test DIP: Create a ReportGenerator with MySQLDatabase,
-        //   generate a report. Then create another with PostgreSQLDatabase
-        //   and generate a report. Print both results to show the
-        //   implementation was swapped without changing ReportGenerator.
-
+        System.out.println(rgm.generateReport());
+        System.out.println(rgp.generateReport());
     }
 }
