@@ -1,7 +1,5 @@
 package com.amigoscode._4_datastructures._3_stacks;
 
-// Exercise: Stack Operations
-// Learn how to use the Stack data structure - Last In, First Out (LIFO).
 
 import java.util.Stack;
 
@@ -9,42 +7,58 @@ public class StackExercises {
 
     public static void main(String[] args) {
 
-        // TODO: 1 - Create a Stack of Strings called 'stack'
+        Stack<String> stack = new Stack<>();
 
+        stack.push("Java");
+        stack.push("Python");
+        stack.push("C++");
+        stack.push("JavaScript");
+        stack.push("Go");
 
-        // TODO: 2 - Push 5 elements onto the stack: "Java", "Python", "C++", "JavaScript", "Go"
+        System.out.println(stack.peek());
+        System.out.println(stack.pop());
+        System.out.println(stack);
+        System.out.println(stack.isEmpty());
 
-
-        // TODO: 3 - Peek at the top element without removing it
-        //           Print the result (should be "Go")
-
-
-        // TODO: 4 - Pop an element from the stack and print it
-        //           Then print the stack to see the remaining elements
-
-
-        // TODO: 5 - Check if the stack is empty using isEmpty()
-        //           Print the result
 
 
         // --- String Reversal ---
         System.out.println("\n--- String Reversal ---");
         String original = "Hello World";
-        // TODO: 6 - Use a Stack to reverse the string 'original'
-        //           Push each character onto a stack, then pop them all to build the reversed string
-        //           Print both original and reversed strings
+        Stack<Character> reverse = new Stack<>();
+        for (Character c : original.toCharArray()) {
+            reverse.push(c);
+        }
 
+        StringBuilder sb = new StringBuilder();
+        while (!reverse.isEmpty()) {
+            sb.append(reverse.pop());
+        }
+        System.out.println(original);
+        System.out.println(sb);
 
         // --- Balanced Brackets ---
         System.out.println("\n--- Balanced Brackets ---");
         String balanced = "({[()]})";
         String unbalanced = "({[})";
-        // TODO: 7 - Implement a balanced brackets checker
-        //           Use a Stack to check if a string of brackets is balanced
-        //           For each char: if opening bracket, push it; if closing bracket, check
-        //           that the top of stack is the matching opening bracket
-        //           Test with both 'balanced' and 'unbalanced' strings
-        //           Print whether each string is balanced or not
+        System.out.println(isBalanced(balanced));
+        System.out.println(isBalanced(unbalanced));
+    }
 
+    static boolean isBalanced(String in) {
+        if (in.length() < 2) return false;
+
+        Stack<Character> balanced = new Stack<>();
+        for (Character c : in.toCharArray()) {
+            if (c == '(' || c == '{' || c == '[') {
+                balanced.push(c);
+            } else {
+                Character ch = balanced.pop();
+                if ((ch == '(' && c != ')') || (ch == '{' && c != '}') || (ch == '[' && c != ']') ) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
