@@ -18,44 +18,43 @@ import java.util.List;
  */
 public class UpperBoundedWildcard {
 
-    // TODO: 1 - Create a static method: double sumOfList(List<? extends Number> list)
-    //  It should iterate through the list and sum all elements using doubleValue().
-    //  Return the total sum.
+    static double sumOfList(List<? extends Number> list) {
+        double sum = 0;
+        for (Number number : list) {
+            sum += number.doubleValue();
+        }
+        return sum;
+    }
 
-
-    // TODO: 2 - Create a static method:
-    //  void copyToNumberList(List<? extends Number> source, List<Number> destination)
-    //  It should copy all elements from source into destination.
-    //  This works because anything that extends Number IS-A Number.
-
+    static void copyToNumberList(List<? extends Number> source, List<Number> destination) {
+        for (Number number : source) {
+            destination.add(number);
+        }
+    }
 
     public static void main(String[] args) {
 
-        // TODO: 3 - Create three lists and call sumOfList() with each:
-        //  (a) List<Integer> with values 1, 2, 3, 4, 5
-        //  (b) List<Double> with values 1.5, 2.5, 3.5
-        //  (c) List<Long> with values 100L, 200L, 300L
-        //  Print the sum for each.
+        List<Integer> integers = Arrays.asList(1, 2, 3, 4, 5);
+        List<Double> doubles = Arrays.asList(1.5, 2.5, 3.5);
+        List<Long> longs = Arrays.asList(100L, 200L, 300L);
+        System.out.println(sumOfList(integers));
+        System.out.println(sumOfList(doubles));
+        System.out.println(sumOfList(longs));
+
+         List<? extends Number> numbers = new ArrayList<Integer>();
+         /*
+                    numbers.add(1);       // Why doesn't this compile?
+                    numbers.add(1.0);     // Why doesn't this compile?
+                    The compiler doesn't know the actual type. The list could be
+                    List<Integer>, List<Double>, or any other Number subclass.
+          */
 
 
-        // TODO: 4 - Demonstrate that you CANNOT add to List<? extends Number>.
-        //  Uncomment the code below, observe the compile error, then comment
-        //  it back out. Add a comment explaining why.
-        //
-        // List<? extends Number> numbers = new ArrayList<Integer>();
-        // numbers.add(1);       // Why doesn't this compile?
-        // numbers.add(1.0);     // Why doesn't this compile?
-        // Hint: The compiler doesn't know the actual type. The list could be
-        // List<Integer>, List<Double>, or any other Number subclass.
 
+        List<Number> numbers1 = new ArrayList<>();
+        copyToNumberList(integers, numbers1);
+        System.out.println(numbers1);
 
-        // TODO: 5 - Use copyToNumberList() to copy a List<Integer> into a
-        //  List<Number>. Print the destination list to verify it worked.
-
-
-        // TODO: 6 - Add a comment below explaining the PECS principle
-        //  (Producer Extends, Consumer Super) as it applies to this exercise.
-        //  Why is "extends" appropriate when the list is a PRODUCER (we read from it)?
 
     }
 }
