@@ -29,40 +29,21 @@ public class SortingExercise {
 
         List<String> words = List.of("Java", "Go", "Python", "C", "JavaScript", "Rust", "Kotlin");
 
-        // TODO: 1 - Sort 'fruits' in natural (alphabetical) order
-        //           Use sorted() without arguments
-        //           Print each fruit
+        System.out.println(fruits.stream().sorted(Comparator.naturalOrder()).toList());
+
+        System.out.println(words.stream().sorted(Comparator.comparingInt(String::length)).toList());
+
+        System.out.println(people.stream().sorted(Comparator.comparingInt(Person::age)).toList());
+
+        System.out.println(fruits.stream().sorted(Comparator.reverseOrder()).toList());
+
+        System.out.println(people.stream().sorted(Comparator.comparingInt(Person::age).thenComparing(Person::name)).toList());
+
+        people.stream().sorted(Comparator.comparing(Person::city))
+                .forEach(p -> System.out.println("Name: %s, city: %s".formatted(p.name(), p.city())));
 
 
-        // TODO: 2 - Sort 'words' by their length (shortest first)
-        //           Use sorted(Comparator.comparingInt(String::length))
-        //           Print each word
-
-
-        // TODO: 3 - Sort 'people' by age (youngest first)
-        //           Print each person's name and age
-
-
-        // TODO: 4 - Sort 'fruits' in reverse alphabetical order
-        //           Use Comparator.reverseOrder()
-        //           Print each fruit
-
-
-        // TODO: 5 - Sort 'people' by multiple criteria: first by age, then by name
-        //           People with the same age should be sorted alphabetically by name
-        //           Print each person
-
-
-        // TODO: 6 - Sort 'people' using Comparator.comparing() with a key extractor
-        //           Sort by city name
-        //           Print each person's name and city
-
-
-        // TODO: 7 - Use thenComparing for secondary sort:
-        //           Sort 'people' by city first, then by age descending within each city
-        //           Hint: Use Comparator.comparing(Person::city)
-        //                 .thenComparing(Comparator.comparingInt(Person::age).reversed())
-        //           Collect to a list and print
+        System.out.println(people.stream().sorted(Comparator.comparing(Person::city).thenComparing(Comparator.comparingInt(Person::age).reversed())).toList());
 
     }
 }

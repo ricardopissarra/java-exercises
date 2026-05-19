@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Exercise: FlatMap
@@ -58,40 +59,35 @@ public class FlatMapExercise {
 
         int[][] nestedInts = {{1, 2, 3}, {4, 5}, {6, 7, 8, 9}};
 
-        // TODO: 1 - Flatten 'nestedLists' (List<List<String>>) into a single stream
-        //           of strings using flatMap
-        //           Print each language
+        System.out.println(nestedLists.stream().flatMap(List::stream).toList());
 
+        System.out.println(Arrays.stream(arrayOfArrays).flatMap(Arrays::stream).toList());
 
-        // TODO: 2 - Flatten 'arrayOfArrays' (String[][]) using flatMap with Arrays::stream
-        //           Print each color
+        words.stream()
+                .flatMap(word -> word.chars()
+                        .mapToObj(c -> (char) c)
+                )
+                        .forEach(c -> System.out.print(c + " "));
 
+        System.out.println();
 
-        // TODO: 3 - Use flatMap to get all individual characters from 'words'
-        //           Hint: Map each word to a stream of its characters using
-        //           word.chars().mapToObj(c -> (char) c)
-        //           Print each character
+        System.out.println(optionals.stream().flatMap(Optional::stream).toList());
 
+        departments.stream()
+                .flatMap(department -> Stream.of(department.employees))
+                .flatMap(List::stream)
+                .forEach(e -> System.out.println("Name: %s, salary: %.2f".formatted(e.name(), e.salary())));
 
-        // TODO: 4 - Use flatMap with Optional values:
-        //           From 'optionals', extract only the present values using
-        //           flatMap(opt -> opt.stream())  or  Optional::stream
-        //           Print each name
+        System.out.println(Arrays.stream(nestedInts).flatMapToInt(Arrays::stream).sum());
 
-
-        // TODO: 5 - Flatten nested objects: from 'departments', get all employees
-        //           Use flatMap to go from Department -> stream of Employees
-        //           Print each employee's name and salary
-
-
-        // TODO: 6 - Use flatMapToInt to flatten 'nestedInts' into a single IntStream
-        //           Calculate and print the sum of all numbers
-        //           Hint: Arrays.stream(nestedInts).flatMapToInt(Arrays::stream)
-
-
-        // TODO: 7 - Combine flatMap with other operations:
-        //           From 'departments', get all employees with salary > 75000
-        //           Collect their names to a list and print it
-
+        System.out.println(
+                departments.stream().flatMap(
+                department -> Stream.of(department.employees)
+                )
+                .flatMap(List::stream)
+                .filter(e -> e.salary() > 7500)
+                .map(Employee::name)
+                .toList()
+        );
     }
 }
