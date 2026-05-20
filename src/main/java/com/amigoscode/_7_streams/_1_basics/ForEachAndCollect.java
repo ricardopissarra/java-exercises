@@ -19,30 +19,18 @@ public class ForEachAndCollect {
         List<String> languages = List.of("Java", "Python", "JavaScript", "Go", "Rust", "Java", "Python");
         List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
-        // TODO: 1 - Use forEach to print each element of 'languages' on a separate line
-        //           Use a lambda expression
+        languages.forEach(System.out::println);
 
+        numbers.forEach(System.out::println);
 
-        // TODO: 2 - Use forEach with a method reference to print each element of 'numbers'
-        //           Use System.out::println
+        System.out.println(numbers.stream().filter(n -> n%2 == 0).toList());
 
+        System.out.println(languages.stream().collect(Collectors.toSet()));
 
-        // TODO: 3 - Filter 'numbers' to keep even numbers, then collect the results to a List
-        //           Print the resulting list
+        List<Integer> integerList = numbers.stream().collect(Collectors.toUnmodifiableList());
 
-
-        // TODO: 4 - Collect 'languages' stream results to a Set (removes duplicates automatically)
-        //           Print the resulting set
-
-
-        // TODO: 5 - Collect 'numbers' stream to an unmodifiable list
-        //           Use Collectors.toUnmodifiableList() or .toList()
-        //           Print the result
-
-
-        // TODO: 6 - Use Collectors.toCollection() to collect 'languages' into a LinkedList
-        //           Print the resulting LinkedList and its class name to verify the type
-        //           Hint: Collectors.toCollection(LinkedList::new)
-
+        LinkedList<String> stringLinkedList = languages.stream().collect(Collectors.toCollection(LinkedList::new));
+        System.out.println(stringLinkedList);
+        System.out.println(stringLinkedList.getClass());
     }
 }

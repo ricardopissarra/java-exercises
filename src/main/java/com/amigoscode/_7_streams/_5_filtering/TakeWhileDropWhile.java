@@ -17,34 +17,26 @@ public class TakeWhileDropWhile {
         List<Integer> unsortedNumbers = List.of(1, 3, 2, 5, 4, 7, 6, 8);
         List<String> logLevels = List.of("DEBUG", "DEBUG", "INFO", "INFO", "WARN", "ERROR", "ERROR");
         List<String> words = List.of("apple", "avocado", "apricot", "banana", "blueberry", "cherry");
+        System.out.println("Take while n < 5");
+        sortedNumbers.stream().takeWhile(n -> n < 5).forEach(n -> System.out.print(n + " "));
+        System.out.println();
 
-        // TODO: 1 - Use takeWhile to take numbers from 'sortedNumbers' while they are < 5
-        //           Print the result (should be 1, 2, 3, 4)
+        System.out.println("Drop while n < 5");
+        sortedNumbers.stream().dropWhile(n -> n < 5).forEach(n -> System.out.print(n + " "));
+        System.out.println();
 
+        System.out.println(sortedNumbers.stream().takeWhile(n -> n < 7).filter(n -> n % 2 == 0).toList());
 
-        // TODO: 2 - Use dropWhile to skip numbers from 'sortedNumbers' while they are < 5
-        //           Print the result (should be 5, 6, 7, 8, 9, 10)
+        System.out.println("Take while word starts with a");
+        words.stream().takeWhile(s -> s.startsWith("a")).forEach(s -> System.out.print(s + " "));
+        System.out.println();
 
+        System.out.println("TakeWhile vs filter on unsortedNumbers");
+        unsortedNumbers.stream().takeWhile(n -> n < 5).forEach(n -> System.out.print(n + " "));
+        System.out.println();
+        unsortedNumbers.stream().filter(n -> n < 5).forEach(n -> System.out.print(n + " "));
+        System.out.println();
 
-        // TODO: 3 - Combine takeWhile with other operations:
-        //           From 'sortedNumbers', take numbers while < 7, then filter to keep
-        //           only even numbers, and collect to a list
-        //           Print the result
-
-
-        // TODO: 4 - Use takeWhile on 'words' to take words while they start with "a"
-        //           Print each word taken
-
-
-        // TODO: 5 - Compare takeWhile vs filter on 'unsortedNumbers':
-        //           First, use takeWhile(n -> n < 5) and print the result
-        //           Then, use filter(n -> n < 5) and print the result
-        //           Notice the different outputs - takeWhile stops at first non-match
-
-
-        // TODO: 6 - Use dropWhile on 'logLevels' to skip all DEBUG entries,
-        //           then collect the remaining entries to a list
-        //           Print the result
-
+        System.out.println(logLevels.stream().dropWhile(s -> s.equals("DEBUG")).toList());
     }
 }

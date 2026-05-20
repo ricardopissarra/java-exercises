@@ -1,60 +1,66 @@
 package com.amigoscode._4_datastructures._8_challenge;
 
-// Exercise: Data Structure Challenge
-// Combine multiple data structures to solve a real-world problem.
-// Manage a collection of students, group them, track recently viewed, and generate reports.
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 public class DataStructureChallenge {
 
-    // TODO: 1 - Create a Student record (or class) with three fields:
-    //           String name, int grade, String subject
-    //           If using a record: record Student(String name, int grade, String subject) {}
-    //           If using a class: include constructor, getters, and a toString() method
-
+    static record Student(String name, int grade, String subject) {}
 
     public static void main(String[] args) {
+        List<Student> students = new ArrayList<>();
+        students.add(new Student("Alice", 92, "Math"));
+        students.add(new Student("Tom", 78, "Science"));
+        students.add(new Student("Ricardo", 49, "English"));
+        students.add(new Student("Jamila", 92, "Math"));
+        students.add(new Student("Alex", 33, "Science"));
+        students.add(new Student("Marie", 81, "English"));
+        students.add(new Student("Mario", 12, "Math"));
+        students.add(new Student("Bob", 50, "Science"));
+        students.add(new Student("Nelson", 99, "English"));
+        students.add(new Student("Ian", 97, "Math"));
 
-        // TODO: 2 - Create a List of 10 students with various names, grades, and subjects
-        //           Use at least 3 different subjects (e.g., "Math", "Science", "English")
-        //           Example: new Student("Alice", 92, "Math")
+        Map<String, List<Student>> mapBySubject = new HashMap<>();
+        for (Student student : students) {
+            mapBySubject.computeIfAbsent(student.subject, k -> new ArrayList<>()).add(student);
+        }
+
+        mapBySubject.entrySet()
+                .forEach(e -> System.out.println("Subject: %s, students: %s".formatted(e.getKey(), e.getValue())));
+
+        Set<String> uniqueSubjects = new HashSet<>();
+        for (Student student : students) {
+            uniqueSubjects.add(student.subject);
+        }
+        System.out.println(uniqueSubjects);
 
 
-        // TODO: 3 - Use a Map<String, List<Student>> to group students by subject
-        //           Iterate through the student list
-        //           For each student, use computeIfAbsent() to get or create the list for their subject
-        //           Then add the student to that list
-        //           Print each subject and its students
+        Stack<Student> viewed = new Stack<>();
+        Random random = new Random();
+        viewed.add(students.get(random.nextInt(0, 9)));
+        viewed.add(students.get(random.nextInt(0, 9)));
+        viewed.add(students.get(random.nextInt(0, 9)));
+        System.out.println(viewed.pop());
+        System.out.println(viewed.pop());
+        System.out.println(viewed.pop());
 
+        students.sort(Comparator.comparingInt(Student::grade).reversed());
 
-        // TODO: 4 - Use a Set<String> to find all unique subjects
-        //           Iterate through the students and add each subject to the set
-        //           Print the unique subjects
-
-
-        // TODO: 5 - Use a Stack<Student> to track the last 3 students "viewed"
-        //           Push any 3 students from the list onto the stack
-        //           Then pop and print them to show the viewing history (most recent first)
-
-
-        // TODO: 6 - Sort the student list by grade in descending order using a Comparator
-        //           Use list.sort() with Comparator.comparingInt() and .reversed()
-        //           Print the sorted list
-
-
-        // TODO: 7 - Print a summary report:
-        //           - Total number of students
-        //           - Number of unique subjects (from the Set)
-        //           - Highest grade student (first in sorted list)
-        //           - Number of students per subject (from the Map)
+        System.out.println(students);
+        System.out.println();
+        System.out.println("""
+                Summary report:
+                Total number of students: %d
+                Number of unique subjects: %d
+                Highest grade student: %s""".formatted(
+                        students.size(),
+                uniqueSubjects.size(),
+                students.get(0)
+        ));
+        System.out.println("Number of students per subject:");
+        mapBySubject.entrySet().forEach(
+                e -> System.out.println("- %s: %d".formatted(e.getKey(), e.getValue().size()))
+        );
 
     }
 }

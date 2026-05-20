@@ -11,31 +11,38 @@ package com.amigoscode._5_generics._3_genericclasses;
  */
 public class Box<T> {
 
-    // TODO: 1 - Declare a private field of type T called "content".
-    //  This field will store the item inside the box.
+    private T content;
 
+    public void put(T item) {
+        this.content = item;
+    }
 
-    // TODO: 2 - Create a put(T item) method that stores the item in the box,
-    //  and a get() method that returns the stored item.
+    public T get() {
+        return this.content;
+    }
 
+    public boolean isEmpty() {
+        return this.content == null;
+    }
 
-    // TODO: 3 - Create an isEmpty() method that returns true if the content
-    //  is null, and false otherwise.
-
-
-    // TODO: 4 - Override toString() to return "Box{content=" + content + "}".
-    //  If the box is empty, it should show "Box{content=null}".
+    @Override
+    public String toString() {
+        return "Box={content=%s}".formatted(content);
+    }
 
 
     public static void main(String[] args) {
 
-        // TODO: 5 - Create a Box<String>, put "Hello Generics" in it,
-        //  print the box, and print whether it is empty.
+        Box<String> box1 = new Box<>();
+        box1.put("Hello Generics");
+        System.out.println(box1.isEmpty());
 
-
-        // TODO: 6 - Create a Box<Double>, put 3.14 in it, retrieve the value
-        //  using get(), and print it. Then create another Box<Double> without
-        //  putting anything in it and verify isEmpty() returns true.
+        Box<Double> box2 = new Box<>();
+        box2.put(3.14);
+        System.out.println(box2.get());
+        Box<Double> box3 = new Box<>();
+        System.out.println(box3.isEmpty());
+        System.out.println(box3);
 
     }
 }

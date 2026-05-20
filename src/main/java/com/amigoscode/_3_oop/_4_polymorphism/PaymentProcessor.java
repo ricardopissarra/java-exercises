@@ -1,6 +1,5 @@
 package com.amigoscode._3_oop._4_polymorphism;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,63 +17,104 @@ import java.util.List;
  * - Default methods in interfaces
  */
 
-// TODO: 1 - Create a Payment interface with:
-//   - A method: boolean processPayment(double amount)
-//   - A method: String getPaymentMethod()
-//   - A default method: void printReceipt(double amount) that prints:
-//     "Receipt: $<amount> paid via <getPaymentMethod()>"
-//     Default methods provide a body in the interface itself.
+interface Payment {
+    boolean processPayment(double amount);
+    String getPaymentMethod();
 
+    default void printReceipt(double amount) {
+        System.out.println("Receipt: $%f paid via %s".formatted(amount, getPaymentMethod()));
+    }
+}
 
-// TODO: 2 - Create a CreditCardPayment class that implements Payment.
-//   - Add a private field: cardNumber (String)
-//   - Create a constructor that takes the cardNumber
-//   - Implement processPayment() to print:
-//     "Processing credit card payment of $<amount> with card <cardNumber>"
-//     and return true
-//   - Implement getPaymentMethod() to return "Credit Card"
+class CreditCardPayment implements Payment {
 
+    private String cardNumber;
 
-// TODO: 3 - Create a PayPalPayment class that implements Payment.
-//   - Add a private field: email (String)
-//   - Create a constructor that takes the email
-//   - Implement processPayment() to print:
-//     "Processing PayPal payment of $<amount> from <email>"
-//     and return true
-//   - Implement getPaymentMethod() to return "PayPal"
+    public CreditCardPayment(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
 
+    @Override
+    public boolean processPayment(double amount) {
+        System.out.println("Processing credit card payment of $%.2f with card %s".formatted(amount, cardNumber));
+        return true;
+    }
 
-// TODO: 4 - Create a BankTransferPayment class that implements Payment.
-//   - Add a private field: bankAccountId (String)
-//   - Create a constructor that takes the bankAccountId
-//   - Implement processPayment() to print:
-//     "Processing bank transfer of $<amount> from account <bankAccountId>"
-//     and return true
-//   - Implement getPaymentMethod() to return "Bank Transfer"
+    @Override
+    public String getPaymentMethod() {
+        return "Credit Card";
+    }
+}
 
+class PayPalPayment implements Payment {
 
-// TODO: 5 - Create a PaymentProcessor class with a method:
-//   void processAllPayments(List<Payment> payments, double amount)
-//   Iterate over the list and call processPayment(amount) on each.
-//   After each payment, call printReceipt(amount).
+    private String email;
+
+    public PayPalPayment(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public boolean processPayment(double amount) {
+        System.out.println("Processing PayPal payment of $%.2f from email %s".formatted(amount, email));
+        return true;
+    }
+
+    @Override
+    public String getPaymentMethod() {
+        return "PayPal";
+    }
+}
+
+class BankAccountPayment implements Payment {
+
+    private String bankAccountId;
+
+    public BankAccountPayment(String bankAccountId) {
+        this.bankAccountId = bankAccountId;
+    }
+
+    @Override
+    public boolean processPayment(double amount) {
+        System.out.println("Processing bank transfer of $%.2f from account %s".formatted(amount, bankAccountId));
+        return true;
+    }
+
+    @Override
+    public String getPaymentMethod() {
+        return "Bank Transfer";
+    }
+}
+
+public class PaymentProcessor {
+
+    public void processAllPayments(List<Payment> payments, double amount) {
+        payments.stream()
+                .forEach(p -> {
+                    p.processPayment(amount);
+                    p.printReceipt(amount);
+                });
+    }
+}
+
 
 
 class PaymentDemo {
     public static void main(String[] args) {
-        // TODO: 6 - Create a List<Payment> containing one of each payment type:
-        //   CreditCardPayment, PayPalPayment, BankTransferPayment.
-        //   Then create a PaymentProcessor and call processAllPayments().
+        Payment creditCard = new CreditCardPayment("123A");
+        Payment payPal = new PayPalPayment("user@email.com");
+        Payment bankTransfer = new BankAccountPayment("ABC176987");
+        List<Payment> paymentList = List.of(creditCard, payPal, bankTransfer);
+        new PaymentProcessor()
+                .processAllPayments(paymentList, 10);
 
-
-        // TODO: 7 - Demonstrate runtime polymorphism:
-        //   Create a Payment variable and assign different implementations to it.
-        //   Call processPayment() each time and observe that the correct
-        //   implementation runs based on the actual object type.
-        //   Example:
-        //     Payment payment = new CreditCardPayment("1234-5678");
-        //     payment.processPayment(100.0);
-        //     payment = new PayPalPayment("user@email.com");
-        //     payment.processPayment(200.0);
+        // Demonstrate runtime polymorphism:
+         Payment payment = new CreditCardPayment("1234-5678");
+         payment.processPayment(100.0);
+         payment = new PayPalPayment("user@email.com");
+         payment.processPayment(200.0);
+         payment = new BankAccountPayment("132DSAD312");
+         payment.processPayment(50.0);
 
     }
 }

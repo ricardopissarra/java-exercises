@@ -14,39 +14,38 @@ import java.util.List;
  */
 public class UnboundedWildcard {
 
-    // TODO: 1 - Create a static method: void printList(List<?> list)
-    //  It should iterate through the list and print each element.
-    //  Note: elements come out as Object since the type is unknown.
+    static void printList(List<?> list) {
+        for (Object o : list) {
+            System.out.println(o);
+        }
+    }
 
-
-    // TODO: 2 - Create a static method: int getSize(List<?> list)
-    //  It should return the size of any list, regardless of its type.
-
+    static int getSize(List<?> list) {
+        return list.size();
+    }
 
     public static void main(String[] args) {
 
-        // TODO: 3 - Create three lists:
-        //  (a) List<String> with values "Hello", "World"
-        //  (b) List<Integer> with values 1, 2, 3
-        //  (c) List<Double> with values 1.1, 2.2, 3.3
-        //  Call printList() and getSize() with each of them.
+        List<String> strings = Arrays.asList("Hello", "World");
+        List<Integer> numbers = Arrays.asList(1, 2, 3);
+        List<Double> doubles = Arrays.asList(1.1, 2.2, 3.3);
+        printList(strings);
+        printList(numbers);
+        printList(doubles);
 
-
-        // TODO: 4 - Demonstrate that you CANNOT add elements to a List<?>.
-        //  Uncomment the code below, observe the compile error, then comment
-        //  it back out. Add a comment explaining why adding is not allowed.
-        //
-        // List<?> unknownList = Arrays.asList("a", "b", "c");
-        // unknownList.add("d");       // Why does this not compile?
-        // unknownList.add(1);         // Why does this not compile either?
-
-
-        // TODO: 5 - Demonstrate what you CAN do with List<?>:
-        //  (a) Get the size
-        //  (b) Check if it is empty
-        //  (c) Read elements as Object
-        //  (d) Remove elements (by index or using clear())
-        //  Write code showing at least two of these operations on a List<?>.
+        System.out.println(getSize(strings));
+        System.out.println(getSize(numbers));
+        System.out.println(getSize(doubles));
+         List<?> unknownList = Arrays.asList("a", "b", "c");
+        /*
+             unknownList.add("d");       // Why does this not compile? is expecting ? and we are providing String
+             unknownList.add(1);         // Why does this not compile either? is expecting ? and we are providing Integer
+         */
+        System.out.println(getSize(unknownList));
+        System.out.println(unknownList.isEmpty());
+        printList(unknownList);
+//        unknownList.remove(0); or .clear() throw UnsupportedOperationException
+        System.out.println(unknownList);
 
     }
 }

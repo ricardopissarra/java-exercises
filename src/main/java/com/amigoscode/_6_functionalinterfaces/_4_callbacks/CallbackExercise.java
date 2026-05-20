@@ -16,43 +16,45 @@ public class CallbackExercise {
 
     public static void main(String[] args) {
 
-        // TODO: 4 - Call fetchData with two lambda callbacks:
-        //  - onSuccess: prints "Data received: <data>"
-        //  - onFailure: prints "Error occurred: <error>"
-        //  Call fetchData twice:
-        //    a) with simulateSuccess = true
-        //    b) with simulateSuccess = false
+        fetchData(
+                true,
+                s -> System.out.println("Data received: %s".formatted(s)),
+                s -> System.out.println("Error occurred: %s".formatted(s))
+         );
+        fetchData(
+                false,
+                s -> System.out.println("Data received: %s".formatted(s)),
+                s -> System.out.println("Error occurred: %s".formatted(s))
+         );
 
+        processAsync(
+                () -> System.out.println("Processing data..."),
+                () -> System.out.println("Processing complete!")
+                );
 
-        // TODO: 5 - Call processAsync with:
-        //  - task: a Runnable that prints "Processing data..."
-        //  - onComplete: a Runnable that prints "Processing complete!"
-
-
-        // TODO: 6 - Use callbacks to chain operations. Call performSteps below
-        //  with three Runnable callbacks: step1 prints "Step 1: Loading",
-        //  step2 prints "Step 2: Transforming", step3 prints "Step 3: Saving".
-        //  The method will execute them in order.
+        performSteps(
+                () -> System.out.println("Step 1: Loading"),
+                () -> System.out.println("Step 2: Transforming"),
+                () -> System.out.println("Step 3: Saving")
+        );
 
     }
 
-    // TODO: 1 - Create a method called fetchData that takes:
-    //    boolean simulateSuccess,
-    //    Consumer<String> onSuccess,
-    //    Consumer<String> onFailure
-    //  If simulateSuccess is true, call onSuccess with "{ \"id\": 1, \"name\": \"Alice\" }"
-    //  If simulateSuccess is false, call onFailure with "Connection timed out"
+    static void fetchData(boolean simulatesSuccess, Consumer<String> onSuccess, Consumer<String> onFailure) {
+        System.out.println("Fetching data...");
+        if(simulatesSuccess) {
+            onSuccess.accept("{ \"id\": 1, \"name\": \"Alice\" }");
+        } else {
+            onFailure.accept("Connection timed out");
+        }
+    }
 
-
-    // TODO: 2 - Inside fetchData (from TODO 1), before calling the callbacks,
-    //  print "Fetching data..." to simulate work being done.
-
-
-    // TODO: 3 - Create a method called processAsync that takes:
-    //    Runnable task,
-    //    Runnable onComplete
-    //  It should run the task first, then call onComplete.
-    //  Print "Starting process..." before the task and "Done." after onComplete.
+    static void processAsync(Runnable task, Runnable onComplete) {
+        System.out.println("Starting process");
+        task.run();
+        onComplete.run();
+        System.out.println("Done.");
+    }
 
 
     /**

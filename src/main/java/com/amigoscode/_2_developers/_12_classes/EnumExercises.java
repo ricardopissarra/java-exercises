@@ -1,5 +1,7 @@
 package com.amigoscode._2_developers._12_classes;
 
+import java.util.Arrays;
+
 /**
  * Enum Exercises
  *
@@ -9,46 +11,57 @@ package com.amigoscode._2_developers._12_classes;
  */
 public class EnumExercises {
 
-    // TODO: 1 - Create an enum called Season with four constants:
-    //  SPRING, SUMMER, AUTUMN, WINTER
-    //  For now, just declare them without any fields or methods.
+    static enum Season {
+        SPRING("Flowers bloom"),
+        SUMMER("Sun shines"),
+        AUTUM("Leaves fall"),
+        WINTER("Snow falls");
 
+        private final String description;
 
-    // TODO: 2 - Modify the Season enum to add:
-    //  - A private final String 'description' field
-    //  - A constructor that takes a String description and assigns it
-    //  - Update each constant to pass a description, e.g.:
-    //    SPRING("Flowers bloom"), SUMMER("Sun shines"),
-    //    AUTUMN("Leaves fall"), WINTER("Snow falls")
-    //  Note: Enum constructors are always private (even without the keyword).
+        private Season(String description) {
+            this.description = description;
+        }
 
+        public String getDescription() {
+            return description;
+        }
+    }
 
-    // TODO: 3 - Add a method getDescription() to the Season enum that
-    //  returns the description field.
+    static enum Priority {
+        LOW(1),
+        MEDIUM(2),
+        HIGH(3);
 
+        private final int level;
 
-    // TODO: 4 - Create an enum called Priority with three constants:
-    //  LOW(1), MEDIUM(2), HIGH(3)
-    //  Each constant has a numeric level.
-    //  Add:
-    //  - A private final int 'level' field
-    //  - A constructor that takes an int level
-    //  - A getter getLevel()
+        private Priority(int level) {
+            this.level = level;
+        }
+
+        public int getLevel() {
+            return level;
+        }
+    }
 
 
     public static void main(String[] args) {
         System.out.println("=== Season Switch ===");
-        // TODO: 5 - Use a switch statement (or switch expression) with a Season value.
-        //  For each season, print a message like "Spring: Flowers bloom"
-        //  using the getDescription() method.
-        //  Test with Season.SUMMER.
+        Season season = Season.SUMMER;
+        switch (season) {
+            case AUTUM -> System.out.println("%s: %s".formatted(Season.AUTUM, Season.AUTUM.getDescription()));
+            case SUMMER -> System.out.println("%s: %s".formatted(Season.SUMMER, Season.SUMMER.getDescription()));
+            case SPRING -> System.out.println("%s: %s".formatted(Season.SPRING, Season.SPRING.getDescription()));
+            case WINTER -> System.out.println("%s: %s".formatted(Season.WINTER, Season.WINTER.getDescription()));
+            default -> System.out.println("Invalid season!");
+        }
 
 
         System.out.println("\n=== Iterate Over Enum Values ===");
-        // TODO: 6 - Use Season.values() to get an array of all Season constants.
-        //  Loop through them and print each one with its description and ordinal.
-        //  Example output: "0: SPRING - Flowers bloom"
-        //  Also iterate over Priority.values() and print each with its level.
+        Arrays.stream(Season.values())
+                .forEach(s -> System.out.println("%d: %s - %s".formatted(s.ordinal(), s, s.getDescription())));
 
+        Arrays.stream(Priority.values())
+                .forEach(p -> System.out.println("%s, level: %d".formatted(p, p.getLevel())));
     }
 }

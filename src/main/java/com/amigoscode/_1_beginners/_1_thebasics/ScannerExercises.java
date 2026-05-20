@@ -12,33 +12,22 @@ public class ScannerExercises {
 
     public static void main(String[] args) {
 
-        // TODO: 1 - Create a Scanner object to read from System.in
-        // Hint: Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter your age: ");
+        int age = scanner.nextInt();
 
-        // TODO: 2 - Prompt the user for their name and read it using nextLine()
-        // Print "Enter your name: " then read the input into a String variable.
-        // Hint: Use System.out.print() (not println) for the prompt so the cursor
-        //       stays on the same line.
+        System.out.println("Hello, %s! You are %d years old.".formatted(name, age));
 
-
-        // TODO: 3 - Prompt the user for their age and read it using nextInt()
-        // Print "Enter your age: " then read the input into an int variable.
-        // Note: After nextInt(), the newline character remains in the buffer.
-
-
-        // TODO: 4 - Print a greeting using the name and age
-        // Example output: "Hello, Alice! You are 25 years old."
-
-
-        // TODO: 5 - Prompt the user for two numbers, read them, and print their sum
-        // Print "Enter first number: ", read it.
-        // Print "Enter second number: ", read it.
-        // Print "Sum: " followed by the result.
-
-
+        System.out.print("Enter first number: ");
+        int firstNumber = scanner.nextInt();
+        System.out.print("Enter second number: ");
+        int secondNumber = scanner.nextInt();
+        System.out.println("Sum: " + (firstNumber + secondNumber));
         // TODO: 6 - Close the scanner to free resources
-        // Hint: scanner.close();
+        scanner.close();
 
     }
 }
